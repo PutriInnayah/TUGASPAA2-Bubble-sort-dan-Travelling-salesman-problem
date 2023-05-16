@@ -1,0 +1,45 @@
+import sys
+from itertools import permutations
+
+# Fungsi untuk menghitung jarak antara dua kota
+def hitung_jarak(kota1, kota2, jarak):
+    return jarak[kota1][kota2]
+
+# Fungsi untuk menghitung panjang tur yang diberikan
+def hitung_panjang_tur(tur, jarak):
+    panjang_tur = 0
+    for i in range(len(tur) - 1):
+        panjang_tur += hitung_jarak(tur[i], tur[i+1], jarak)
+    return panjang_tur
+
+# Fungsi untuk mencari solusi optimal TSP dengan algoritma Brute Force
+def tsp_brute_force(jarak):
+    n = len(jarak)
+    kota = [i for i in range(n)]
+    minimal_panjang_tur = sys.maxsize
+    optimal_tur = []
+
+    # Mencari semua permutasi tur yang mungkin
+    for tur in permutations(kota):
+        panjang_tur = hitung_panjang_tur(tur, jarak)
+
+        # Memperbarui tur optimal jika ditemukan tur yang lebih pendek
+        if panjang_tur < minimal_panjang_tur:
+            minimal_panjang_tur = panjang_tur
+            optimal_tur = list(tur)
+
+    return optimal_tur, minimal_panjang_tur
+
+# Contoh penggunaan program
+if __name__ == "__main__":
+    # Inisialisasi matriks jarak antar kota
+    jarak = [
+        [0, 10, 15, 20],
+        [10, 0, 35, 25],
+        [15, 35, 0, 30],
+        [20, 25, 30, 0]
+    ]
+
+    optimal_tur, minimal_panjang_tur = tsp_brute_force(jarak)
+    print("Tur optimal:", optimal_tur)
+    print("Panjang tur minimal:", minimal_panjang_tur)
